@@ -2,25 +2,75 @@ package introduction;
 
 import java.util.Scanner;
 import java.util.Random;
+import java.lang.String;
+
 
 public class Main {
     Random r = new Random();
+    Random cNum = new Random();
     int Low = 10;
     int High = 100;
+    int cnLow = 1000;
+    int cnHigh = 9999;
+
     int atempts = 3;
 
     private double currentBal = r.nextInt(High - Low) + Low;
     Scanner input = new Scanner(System.in);
+    int pass = r.nextInt(cnHigh - cnLow) + cnLow;
 
-    public void checkAccess() {
-        int pass = 1111;
-        System.out.print("ST BANK ATM (demo pin code '1111')\n");
-        System.out.println("Pin attempts left " + atempts + "\n");
-        System.out.println("Enter the pin code:\n");
+    int cnum1 = cNum.nextInt(cnHigh - cnLow) + cnLow;
+    int cnum2 = cNum.nextInt(cnHigh - cnLow) + cnLow;
+    int cnum3 = cNum.nextInt(cnHigh - cnLow) + cnLow;
+    int cnum4 = cNum.nextInt(cnHigh - cnLow) + cnLow;
+
+    private void addHeader() {
+        System.out.println("|-------------------------------------|");
+        System.out.println("|-JAVA-ATM----------------------------|");
+        System.out.println("|-------------------------------------|");
+        System.out.println("| Card number is: " + cnum1 + "-" + cnum2 + "-" + cnum3 + "-" + cnum4 + " |");
+        System.out.println("| BANK ATM demo pin code: " + pass + "        |");
+        System.out.println("|-------------------------------------|");
+
+    }
+
+    public static Integer tryParse(String text) {
+        try {
+            return Integer.parseInt(text);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
+    private void checkAccess() {
+
+
+        addHeader();
+        System.out.println("Pin attempts left " + atempts);
+        System.out.println("Enter the pin code:");
 
         if (atempts > 0) {
-            int pin = input.nextInt();
-            if (pass == pin) {
+        }
+        String pin = input.next();
+
+
+        boolean isNumeric = pin.chars().allMatch(Character::isDigit);
+        if (pin.isEmpty()) {
+            System.out.println("Pin Can not be empty.");
+            checkAccess();
+        } else if (isNumeric) {
+            if (pin.length() < 4) {
+                System.out.println("Pin must contain 4 digs, not less.");
+                checkAccess();
+            } else if (pin.length() > 4) {
+                System.out.println("Pin must contain 4 digs, not more.");
+                checkAccess();
+            }
+            System.out.println(pin);
+
+            int pinInt = Integer.parseInt(pin);
+
+            if (pass == pinInt) {
                 System.out.println("\t-- Correct pin:\n");
                 atmMenu();
             } else {
@@ -29,23 +79,25 @@ public class Main {
                 System.out.println("\t--Pin attempts left\n" + atempts);
                 checkAccess();
             }
+
         } else {
-            System.out.println("\t-- Your card is blocked. \n");
-            System.exit(0);
+            System.out.println("Pin must contain 4 digs, not chars.");
+            checkAccess();
         }
     }
 
-    public void atmMenu() {
+
+    private void atmMenu() {
 
         int selection;
-        System.out.print("ST BANK ATM (demo pin code '1111'");
-        System.out.println("Select required action\n");
-        System.out.println("---------------------------");
-        System.out.println("| (1)      Actual Balance |");
-        System.out.println("| (2)     Withdrawal Cash |");
-        System.out.println("| (3)        Make Deposit |");
-        System.out.println("| (4)                Exit |");
-        System.out.println("---------------------------");
+        addHeader();
+        System.out.println("| Select required action              |");
+        System.out.println("---------------------------------------");
+        System.out.println("| (1)                  Actual Balance |");
+        System.out.println("| (2)                 Withdrawal Cash |");
+        System.out.println("| (3)                    Make Deposit |");
+        System.out.println("| (4)                            Exit |");
+        System.out.println("---------------------------------------");
 
         selection = input.nextInt();
         switch (selection) {
@@ -60,13 +112,18 @@ public class Main {
                 break;
             case 4:
                 System.out.println("Thank you for using ATM! \n Goodbye! \n");
+                break;
+            default:
+                System.out.println("Please don't try to destroy ATM. \nEnter value between 1 and 4. \n");
+                checkAccess();
+                break;
         }
     }
 
-    public void viewBalance() {
+    private void viewBalance() {
         int selection1;
-        System.out.println("\t-- Your Current Balance is:$ " + currentBal);
-        System.out.println("Press (1) to go to the Main Menu \n Press another key to exit \n");
+        System.out.println("\t-- Your Current Balance is: " + currentBal + "Credits");
+        System.out.println("Press (1) to go to the Main Menu. \nPress another key to exit. \n");
         selection1 = input.nextInt();
         switch (selection1) {
             case 1:
@@ -75,45 +132,45 @@ public class Main {
         }
     }
 
-    public void viewBalanceNoConfirm() {
+    private void viewBalanceNoConfirm() {
 
         System.out.println("\t-- Your Current Balance is:$ " + currentBal);
 
     }
 
-    public void withdrawFunds() {
+    private void withdrawFunds() {
         int summToWithdraw;
-        System.out.println("Amount to withdraw: ");
-        System.out.println("-----------------------------");
-        System.out.println("[1] - 5              10 - [2]");
-        System.out.println("[3] - 15      MAIN MENU - [4]");
-        System.out.println("[5] - EXIT                   ");
-        System.out.println("-----------------------------");
+        addHeader();
+        System.out.println("| Select required action              |");
+        System.out.println("---------------------------------------");
+        System.out.println("| (1) - 5                    10 - (2) |");
+        System.out.println("| (3) - 15            MAIN MENU - (4) |");
+        System.out.println("| (5) - EXIT                          |");
+        System.out.println("---------------------------------------");
         System.out.print("Select amount to withdraw: ");
         summToWithdraw = input.nextInt();
         if (summToWithdraw > currentBal) {
-            System.out.print("not enought money");
+            System.out.print("\t-- not enought money");
             withdrawFunds();
         } else if (summToWithdraw < 0) {
             System.out.print("Some Have amount is less that 0 - contact support");
-            viewBalanceNoConfirm();
             withdrawFunds();
         } else {
 
             switch (summToWithdraw) {
                 case 1:
                     accountWithdraw(5);
-                    viewBalanceNoConfirm();
+                    System.out.print("\t-- You successfully Withdrow 5 credits\n");
                     atmMenu();
                     break;
                 case 2:
                     accountWithdraw(10);
-                    viewBalanceNoConfirm();
+                    System.out.print("\t-- You successfully Withdrow 10 credits\n");
                     atmMenu();
                     break;
                 case 3:
                     accountWithdraw(15);
-                    viewBalanceNoConfirm();
+                    System.out.print("\t-- You successfully Withdrow 15 credits\n");
                     atmMenu();
                     break;
                 case 4:
@@ -127,44 +184,49 @@ public class Main {
         }
     }
 
-    public void accountWithdraw(int SummToWithdrow) {
+    private void accountWithdraw(int SummToWithdrow) {
         currentBal = currentBal - SummToWithdrow;
         System.out.println("Please take your funds.");
         viewBalanceNoConfirm();
     }
 
-    public void depositFunds() {
+    private void depositFunds() {
         int addSelection;
-        System.out.println("Amount to deposit: ");
-        System.out.println("-----------------------------");
-        System.out.println("[1] - 5              10 - [2]");
-        System.out.println("[3] - 15    CUSTOM SUMM - [4]");
-        System.out.println("[5] - MAIN MENU    EXIT - (6)");
-        System.out.println("-----------------------------");
+        addHeader();
+        System.out.println("| Amount to deposit:                  |");
+        System.out.println("--------------------------------------");
+        System.out.println("| (1) - 5                    10 - (2) |");
+        System.out.println("| (3) - 15          CUSTOM SUMM - (4) |");
+        System.out.println("| (5) - MAIN MENU          EXIT - (6) |");
+        System.out.println("--------------------------------------");
         System.out.print("Select amount to deposit: ");
         addSelection = input.nextInt();
         switch (addSelection) {
             case 1:
                 accountAdd(5);
+                System.out.print("\t-- You successfully deposited 5 credits\n");
                 atmMenu();
                 break;
             case 2:
                 accountAdd(10);
+                System.out.print("\t-- You successfully deposited 10 credits\n");
                 atmMenu();
                 break;
             case 3:
                 accountAdd(15);
+                System.out.print("\t-- You successfully deposited 15 credits\n");
                 atmMenu();
                 break;
             case 4:
-                System.out.print("Specify amount to add:");
+                System.out.print("Specify amount to add:\n");
                 int depositFunds = input.nextInt();
                 if (depositFunds < 0) {
-                    System.out.print("Some Have amount is less that 0 - try again");
+                    System.out.print("Some Have amount is less that 0 - try again\n");
                     viewBalanceNoConfirm();
                     depositFunds();
                 } else {
                     accountAdd(depositFunds);
+                    System.out.print("\t--  You successfully deposited " + depositFunds + " credits\n");
                     atmMenu();
                 }
                 break;
@@ -178,10 +240,10 @@ public class Main {
         }
     }
 
-    public void accountAdd(int depositFunds) {
+    private void accountAdd(int depositFunds) {
         currentBal = currentBal + depositFunds;
         viewBalanceNoConfirm();
-        System.out.println("Thank you.");
+
     }
 
     public static void main(String[] args) {
