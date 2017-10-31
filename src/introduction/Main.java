@@ -34,13 +34,6 @@ public class Main {
 
     }
 
-    public static Integer tryParse(String text) {
-        try {
-            return Integer.parseInt(text);
-        } catch (NumberFormatException e) {
-            return null;
-        }
-    }
 
     private void checkAccess() {
 
@@ -112,6 +105,7 @@ public class Main {
                 break;
             case 4:
                 System.out.println("Thank you for using ATM! \n Goodbye! \n");
+                System.exit(0);
                 break;
             default:
                 System.out.println("Please don't try to destroy ATM. \nEnter value between 1 and 4. \n");
@@ -122,7 +116,7 @@ public class Main {
 
     private void viewBalance() {
         int selection1;
-        System.out.println("\t-- Your Current Balance is: " + currentBal + "Credits");
+        System.out.println("\t-- Your Current Balance is: " + currentBal + " Credits");
         System.out.println("Press (1) to go to the Main Menu. \nPress another key to exit. \n");
         selection1 = input.nextInt();
         switch (selection1) {
