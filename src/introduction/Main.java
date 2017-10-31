@@ -47,7 +47,7 @@ public class Main {
 
         addHeader();
         System.out.println("Pin attempts left " + atempts);
-        System.out.println("Enter the pin code:");
+        System.out.println("Enter the pin code (4 digits):");
 
         if (atempts > 0) {
         }
@@ -60,10 +60,10 @@ public class Main {
             checkAccess();
         } else if (isNumeric) {
             if (pin.length() < 4) {
-                System.out.println("Pin must contain 4 digs, not less.");
+                System.out.println("Pin must contain 4 digits, not less.");
                 checkAccess();
             } else if (pin.length() > 4) {
-                System.out.println("Pin must contain 4 digs, not more.");
+                System.out.println("Pin must contain 4 digits, not more.");
                 checkAccess();
             }
             System.out.println(pin);
@@ -81,7 +81,7 @@ public class Main {
             }
 
         } else {
-            System.out.println("Pin must contain 4 digs, not chars.");
+            System.out.println("Pin must contain 4 digits, not chars.");
             checkAccess();
         }
     }
@@ -134,7 +134,7 @@ public class Main {
 
     private void viewBalanceNoConfirm() {
 
-        System.out.println("\t-- Your Current Balance is:$ " + currentBal);
+        System.out.println("\t-- Your Current Balance is " + currentBal + " credits");
 
     }
 
@@ -185,9 +185,16 @@ public class Main {
     }
 
     private void accountWithdraw(int SummToWithdrow) {
-        currentBal = currentBal - SummToWithdrow;
-        System.out.println("Please take your funds.");
-        viewBalanceNoConfirm();
+
+        if (currentBal>SummToWithdrow) {
+            currentBal = currentBal - SummToWithdrow;
+
+            System.out.println("Please take your funds.");
+            viewBalanceNoConfirm();
+        }else{
+            System.out.println("Not enough credits on account.");
+            atmMenu();
+        }
     }
 
     private void depositFunds() {
